@@ -1,0 +1,312 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Texture Animation (Three.js)</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	
+</head>
+<body>
+
+<script src="three.min.js"></script>
+<script src="Detector.js"></script>
+<script src="Stats.js"></script>
+<script src="OrbitControls.js"></script>
+<script src="THREEx.KeyboardState.js"></script>
+<script src="THREExFullScreen.js"></script>
+<script src="THREEx.WindowResize.js"></script>
+ <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<!-- ------------------------------------------------------------ -->
+
+<div id="ThreeJS" style="position: absolute; left:0px; top:0px"></div>
+
+<script>
+/*
+	Three.js "tutorials by example"
+	Author: Lee Stemkoski
+	Date: July 2013 (three.js v59dev)
+*/
+
+// MAIN
+
+// standard global variables
+var container, scene, camera, renderer, controls, stats;
+var keyboard = new THREEx.KeyboardState();
+var clock = new THREE.Clock();
+var mouseX, mouseY;
+// custom global variables
+var annie, boomer; // animators
+
+init();
+animate();
+
+// FUNCTIONS 		
+function init() 
+{
+	// SCENE
+	scene = new THREE.Scene();
+	// CAMERA
+	var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
+	var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
+	camera = new THREE.PerspectiveCamera(30, window.innerWidth/window.innerHeight, 10, 1000);
+	scene.add(camera);
+	camera.position.set(0,0,0);
+    camera.rotation.set(0,0,0);
+	//camera.lookAt(scene.position);	
+	// RENDERER
+	if ( Detector.webgl )
+		renderer = new THREE.WebGLRenderer( {antialias:true} );
+	else
+		renderer = new THREE.CanvasRenderer(); 
+	renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	container = document.getElementById( 'ThreeJS' );
+	container.appendChild( renderer.domElement );
+	// EVENTS
+	THREEx.WindowResize(renderer, camera);
+	THREEx.FullScreen.bindKey({ charCode : 'm'.charCodeAt(0) });
+	// CONTROLS
+	//controls = new THREE.OrbitControls( camera, renderer.domElement );
+	// STATS
+	stats = new Stats();
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.bottom = '0px';
+	stats.domElement.style.zIndex = 100;
+	container.appendChild( stats.domElement );
+	// LIGHT
+	//var light = new THREE.PointLight(0xffffff);
+	//light.position.set(0,250,0);
+	//scene.add(light);
+	// FLOOR
+	
+	// SKYBOX/FOG
+	//var skyBoxGeometry = new THREE.CubeGeometry( 10000, 10000, 10000 );
+	//var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x9999ff, side: THREE.BackSide } );
+	//var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
+	// scene.add(skyBox);
+	//scene.fog = new THREE.FogExp2( 0x9999ff, 0.00025 );
+	
+	////////////
+	// CUSTOM //
+	////////////
+	
+	// MESHES WITH ANIMATED TEXTURES!
+	 var lakeTexture = new THREE.ImageUtils.loadTexture( 'spriteSheets/lake.png' );
+	annie4 = new TextureAnimator( lakeTexture, 1, 8, 8, 100 ); // texture, #horiz, #vert, #total, duration.
+	var lakeMaterial = new THREE.MeshBasicMaterial( { map: lakeTexture, side:THREE.DoubleSide, transparent: true, depthWrite: false, depthTest: false  } );
+	var lakeGeometry = new THREE.PlaneGeometry(1500, 1500, 1, 1);
+	var lake = new THREE.Mesh(lakeGeometry, lakeMaterial);
+	
+    lake.position.y=-50;
+    lake.rotation.x=degToRadians(90);
+	scene.add(lake);
+    
+    
+	var runnerTexture = new THREE.ImageUtils.loadTexture( 'spriteSheets/wierdTree.png' );
+	annie = new TextureAnimator( runnerTexture, 15, 1, 15, 200 ); // texture, #horiz, #vert, #total, duration.
+	var runnerMaterial = new THREE.MeshBasicMaterial( { map: runnerTexture, side:THREE.DoubleSide, transparent: true, wireFrame: true,  depthWrite: true, depthTest: false  } );
+	var runnerGeometry = new THREE.PlaneGeometry(40, 90, 1, 1);
+	var runner = new THREE.Mesh(runnerGeometry, runnerMaterial);
+	runner.position.set(-100,0,0);
+	scene.add(runner);
+    
+    
+    var runnerTexture2 = new THREE.ImageUtils.loadTexture( 'spriteSheets/wierdTree.png' );
+	annie2 = new TextureAnimator( runnerTexture2, 15, 1, 15, 200 ); // texture, #horiz, #vert, #total, duration.
+	var runnerMaterial2 = new THREE.MeshBasicMaterial( { map: runnerTexture, side:THREE.DoubleSide, transparent: true, wireFrame: true, depthWrite: false, depthTest: false  } );
+	var runnerGeometry2 = new THREE.PlaneGeometry(40, 90, 1, 1);
+	var runner2 = new THREE.Mesh(runnerGeometry, runnerMaterial);
+	runner2.position.set(100,0,0);
+    runner2.rotation.y=.5;
+     runner.rotation.y=.5;
+	scene.add(runner2);
+
+var runnerTexture3 = new THREE.ImageUtils.loadTexture( 'spriteSheets/wierdTree.png' );
+	annie3 = new TextureAnimator( runnerTexture3, 15, 1, 15, 200 ); // texture, #horiz, #vert, #total, duration.
+	var runnerMaterial3 = new THREE.MeshBasicMaterial( { map: runnerTexture, side:THREE.DoubleSide, transparent: true, wireFrame: true } );
+    
+	var runnerGeometry3 = new THREE.PlaneGeometry(40, 90, 1, 1);
+	runnerGeometry.opacity = 0.5;
+    var runner3 = new THREE.Mesh(runnerGeometry, runnerMaterial);
+	runner3.position.set(0,0,0);
+    runner3.rotation.y=.5;
+    
+	scene.add(runner3);
+    
+    
+   
+    
+    
+
+}
+
+function animate() 
+{
+    requestAnimationFrame( animate );
+    
+    
+      if ((mouseX<=(.12)*window.innerWidth)&&(mouseX>=.05*window.innerWidth)) {
+                 camera.rotation.y+=.01;  
+                
+                }
+                if ((mouseX>=(.88)*window.innerWidth)&&(mouseX<=.95*window.innerWidth)) {
+                 camera.rotation.y-=.01;  
+                
+                }
+    
+    
+//      if ((mouseY<=(.15)*window.innerHeight)&&(mouseY>=(.05)*window.innerHeight)) {
+  //              camera.rotation.x+=.01;  
+               
+    //         }
+      //     if ((mouseY>=(.85)*window.innerHeight)&&(mouseY<=(.95)*window.innerHeight)) {
+       //         camera.rotation.x-=.01;  
+                
+         //       }
+                
+    
+	render();		
+	update();
+}
+
+function update()
+{
+	var delta = clock.getDelta(); 
+
+	annie.update(1000 * delta);
+    annie4.update(1000 * delta);
+    
+    //boomer.update(1000 * delta);
+	
+	if ( keyboard.pressed("z") ) 
+	{ 
+		// do something
+	}
+	
+	//controls.update();
+	stats.update();
+}
+
+function render() 
+{
+	renderer.render( scene, camera );
+}
+
+function TextureAnimator(texture, tilesHoriz, tilesVert, numTiles, tileDispDuration) 
+{	
+	// note: texture passed by reference, will be updated by the update function.
+		
+	this.tilesHorizontal = tilesHoriz;
+	this.tilesVertical = tilesVert;
+	// how many images does this spritesheet contain?
+	//  usually equals tilesHoriz * tilesVert, but not necessarily,
+	//  if there at blank tiles at the bottom of the spritesheet. 
+	this.numberOfTiles = numTiles;
+	texture.wrapS = texture.wrapT = THREE.RepeatWrapping; 
+	texture.repeat.set( 1 / this.tilesHorizontal, 1 / this.tilesVertical );
+
+	// how long should each image be displayed?
+	this.tileDisplayDuration = tileDispDuration;
+
+	// how long has the current image been displayed?
+	this.currentDisplayTime = 0;
+
+	// which image is currently being displayed?
+	this.currentTile = 0;
+		
+	this.update = function( milliSec )
+	{
+		this.currentDisplayTime += milliSec;
+		while (this.currentDisplayTime > this.tileDisplayDuration)
+		{
+			this.currentDisplayTime -= this.tileDisplayDuration;
+			this.currentTile++;
+			if (this.currentTile == this.numberOfTiles)
+				this.currentTile = 0;
+			var currentColumn = this.currentTile % this.tilesHorizontal;
+			texture.offset.x = currentColumn / this.tilesHorizontal;
+			var currentRow = Math.floor( this.currentTile / this.tilesHorizontal );
+			texture.offset.y = currentRow / this.tilesVertical;
+		}
+	};
+}		
+
+    
+     $( document ).mousemove(function( event ) {
+                 mouseX = event.pageX;
+                mouseY = event.pageY;
+});
+    
+    
+    document.addEventListener('keydown',onDocumentKeyDown,false);
+function onDocumentKeyDown(event){
+    
+var cameraRotY = camera.rotation.y;    
+var cameraRotX = camera.rotation.x;
+var cameraRotZ = camera.rotation.z;
+    
+var delta = 15;
+    
+
+event = event || window.event;
+var keycode = event.keyCode;
+switch(keycode){
+case 37 : //left arrow 向左箭头
+var xAdd = Math.sin(cameraRotY)*delta;
+var zAdd = Math.cos(cameraRotY)*delta;
+    console.log(zAdd);
+        console.log(xAdd);
+camera.position.z = camera.position.z+xAdd;
+camera.position.x = camera.position.x-zAdd;      
+
+break;
+case 38 : // up arrow 向上箭头 
+var xAdd = Math.sin(cameraRotY)*delta;
+var zAdd = Math.cos(cameraRotY)*delta;
+camera.position.z = camera.position.z-zAdd;
+camera.position.x = camera.position.x-xAdd;
+break;
+case 39 : // right arrow 向右箭头
+var xAdd = Math.sin(cameraRotY)*delta;
+var zAdd = Math.cos(cameraRotY)*delta;
+camera.position.z = camera.position.z- xAdd;
+camera.position.x = camera.position.x+zAdd;
+break;
+case 40 : //down arrow向下箭头
+var xAdd = Math.sin(cameraRotY)*delta;
+var zAdd = Math.cos(cameraRotY)*delta;
+camera.position.z = camera.position.z+ zAdd;
+camera.position.x = camera.position.x+xAdd;
+break;
+case 87:
+camera.position.y = camera.position.y + delta;
+break;
+case 83:
+camera.position.y = camera.position.y - delta;
+break;
+}
+document.addEventListener('keyup',onDocumentKeyUp,false);
+}
+function onDocumentKeyUp(event){
+
+}
+  
+    
+    
+function degToRadians(deg) {
+ var radians = deg * (Math.PI/180);
+    return radians;
+    
+}
+    
+    
+function radiansToDegrees(rad) {
+ var degrees = rad * (180/Math.PI);
+    return degrees;
+}
+    
+    
+</script>
+
+</body>
+</html>

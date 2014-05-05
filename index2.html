@@ -1,0 +1,259 @@
+<html>
+	<head>
+		<title>My first Three.js app</title>
+		<style>canvas { width: 100%; height: 100% }
+        
+          iframe {
+             border:0; 
+             
+           -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+              pointer-events: none;
+            }
+        </style>
+	</head>
+	<body>
+		<script src="three.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="detector.js"></script>
+<script src="Stats.js"></script>
+<script src="OrbitControls.js"></script>
+<script src="THREEx.KeyboardState.js"></script>
+<script src="THREExFullScreen.js"></script>
+<script src="THREEx.WindowResize.js"></script>
+
+<!-- new for this example -->
+<script src="CSS3DRenderer.js"></script>
+    
+        
+		<script>
+            
+            document.addEventListener('keydown',onDocumentKeyDown,false);
+function onDocumentKeyDown(event){
+    
+var cameraRotY = camera.rotation.y;    
+var cameraRotX = camera.rotation.x;
+var cameraRotZ = camera.rotation.z;
+    
+var delta = 15;
+    
+
+event = event || window.event;
+var keycode = event.keyCode;
+switch(keycode){
+case 37 : //left arrow 向左箭头
+var xAdd = Math.sin(cameraRotY)*delta;
+var zAdd = Math.cos(cameraRotY)*delta;
+    console.log(zAdd);
+        console.log(xAdd);
+camera.position.z = camera.position.z+xAdd;
+camera.position.x = camera.position.x-zAdd;      
+
+break;
+case 38 : // up arrow 向上箭头 
+var xAdd = Math.sin(cameraRotY)*delta;
+var zAdd = Math.cos(cameraRotY)*delta;
+camera.position.z = camera.position.z-zAdd;
+camera.position.x = camera.position.x-xAdd;
+break;
+case 39 : // right arrow 向右箭头
+var xAdd = Math.sin(cameraRotY)*delta;
+var zAdd = Math.cos(cameraRotY)*delta;
+camera.position.z = camera.position.z- xAdd;
+camera.position.x = camera.position.x+zAdd;
+break;
+case 40 : //down arrow向下箭头
+var xAdd = Math.sin(cameraRotY)*delta;
+var zAdd = Math.cos(cameraRotY)*delta;
+camera.position.z = camera.position.z+ zAdd;
+camera.position.x = camera.position.x+xAdd;
+break;
+case 87:
+camera.position.y = camera.position.y + delta;
+break;
+case 83:
+camera.position.y = camera.position.y - delta;
+break;
+}
+document.addEventListener('keyup',onDocumentKeyUp,false);
+}
+function onDocumentKeyUp(event){
+
+}
+    
+            
+            
+            
+            
+            
+            
+			var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera(30, window.innerWidth/window.innerHeight, 10, 1000);
+           var mouseX, mouseY;
+            var clock = new THREE.Clock();
+            
+            
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth-100, window.innerHeight-100);
+			document.body.appendChild(renderer.domElement);
+            
+            var geometry = new THREE.CubeGeometry(1,1,1);
+            var material = new THREE.MeshBasicMaterial({color: 0x6735ff});
+            var cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+            
+            var botTexture = THREE.ImageUtils.loadTexture( 'bot.png' );
+            
+            var botMaterial = new THREE.SpriteMaterial( {map: botTexture,useScreenCoordinates: false});
+            var sprite = new THREE.Sprite( botMaterial );
+            sprite.position.set(-5,0,0);
+            sprite.scale.set( 4,4,.2);
+            scene.add( sprite );
+            
+            
+            //site
+            
+            	var planeMaterial   = new THREE.MeshBasicMaterial({color: 0x000000, opacity: 0.1, side: THREE.DoubleSide });
+	var planeWidth = 256;
+    var planeHeight = 512;
+	var planeGeometry = new THREE.PlaneGeometry( planeWidth, planeHeight );
+	var planeMesh= new THREE.Mesh( planeGeometry, planeMaterial );
+	planeMesh.position.y =0;
+            
+            
+            
+            
+            
+            
+            var planeMaterial2   = new THREE.MeshBasicMaterial({color: 0x000000, opacity: 0.1, side: THREE.DoubleSide });
+	var planeWidth2 = 256;
+    var planeHeight2 = 512;
+	var planeGeometry2 = new THREE.PlaneGeometry( planeWidth2, planeHeight2 );
+	var planeMesh2= new THREE.Mesh( planeGeometry2, planeMaterial2 );
+	planeMesh2.position.y =0;
+	// add it to the standard (WebGL) scene
+	//scene.add(planeMesh);
+	
+	// create a new scene to hold CSS
+	cssScene = new THREE.Scene();
+	// create the iframe to contain webpage
+	var element	= document.createElement('iframe')
+	// webpage to be loaded into iframe
+	element.src	= "index.html";
+	// width of iframe in pixels
+	var elementWidth = 300;
+	// force iframe to have same relative dimensions as planeGeometry
+	var aspectRatio = planeHeight / planeWidth;
+	var elementHeight = 600;
+	element.style.width  = elementWidth + "px";
+	element.style.height = elementHeight + "px";
+	
+            
+        
+	// create a CSS3DObject to display element
+	var cssObject = new THREE.CSS3DObject( element );
+	// synchronize cssObject position/rotation with planeMesh position/rotation 
+	cssObject.position = planeMesh.position;
+	cssObject.rotation = planeMesh.rotation;
+	// resize cssObject to same size as planeMesh (plus a border)
+	var percentBorder = 0.00;
+	cssObject.scale.x = (1 + percentBorder) * (elementWidth / planeWidth);
+    cssObject.scale.y = (1 + percentBorder) * (elementWidth / planeWidth);
+            cssObject.rotation.y=.3;
+            cssObject.position.z=200;
+	cssScene.add(cssObject);
+            
+            
+            
+            //
+       cssScene2 = new THREE.Scene();
+            var element2	= document.createElement('iframe')
+	// webpage to be loaded into iframe
+	element2.src	= "index.html";
+	// width of iframe in pixels
+	var elementWidth2 = 300;
+	// force iframe to have same relative dimensions as planeGeometry
+	var aspectRatio2 = planeHeight / planeWidth;
+	var elementHeight2 = 600;
+	element2.style.width  = elementWidth2 + "px";
+	element2.style.height = elementHeight2 + "px";
+            var cssObject2 = new THREE.CSS3DObject( element2 );
+	// synchronize cssObject position/rotation with planeMesh position/rotation 
+	cssObject2.position = planeMesh2.position;
+	cssObject2.rotation = planeMesh2.rotation;
+	// resize cssObject to same size as planeMesh (plus a border)
+	var percentBorder = 0.00;
+	cssObject2.scale.x = (1 + percentBorder) * (elementWidth / planeWidth);
+    cssObject2.scale.y = (1 + percentBorder) * (elementWidth / planeWidth);
+            cssObject2.position.x=-200;
+            cssObject2.position.z=0;
+            cssObject2.rotation.y=.3;
+	cssScene2.add(cssObject2);
+            
+            
+            
+            //
+	
+	// create a renderer for CSS
+	rendererCSS	= new THREE.CSS3DRenderer();
+	rendererCSS.setSize( window.innerWidth, window.innerHeight );
+	rendererCSS.domElement.style.position = 'absolute';
+	rendererCSS.domElement.style.top	  = 0;
+	rendererCSS.domElement.style.margin	  = 0;
+	rendererCSS.domElement.style.padding  = 0;
+	document.body.appendChild( rendererCSS.domElement );
+	// when window resizes, also resize this renderer
+	THREEx.WindowResize(rendererCSS, camera);
+
+	renderer.domElement.style.position = 'absolute';
+	renderer.domElement.style.top      = 0;
+	// make sure original renderer appears on top of CSS renderer
+	renderer.domElement.style.zIndex   = 1;
+	rendererCSS.domElement.appendChild( renderer.domElement );
+        
+            
+            //site
+            
+            
+            camera.position.z = 505;
+            
+            $( document ).mousemove(function( event ) {
+                 mouseX = event.pageX;
+                mouseY = event.pageY;
+});
+            
+            function render() {
+                requestAnimationFrame(render);
+                
+                if (mouseX<=(.2)*window.innerWidth) {
+                 camera.rotation.y+=.01;  
+                
+                }
+                if (mouseX>=(.7)*window.innerWidth) {
+                 camera.rotation.y-=.01;  
+                
+                }
+                
+                //cube.rotation.x += .001;
+                //cube.rotation.y += .01;
+                
+                renderer.render(scene, camera);
+                rendererCSS.render( cssScene, camera );
+                rendererCSS.render( cssScene2, camera );
+            }
+            
+            
+            
+                    
+        
+            
+            
+            render();
+            
+            
+		</script>
+	</body>
+</html>
