@@ -5,7 +5,12 @@
 	<title>Texture Animation (Three.js)</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-	
+	<style>
+    canvas {
+     background-color: #c4f2f6;
+    }
+    
+    </style>
 </head>
 <body>
 
@@ -48,12 +53,12 @@ function init()
 	scene = new THREE.Scene();
 	// CAMERA
 	var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
-	var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
-	camera = new THREE.PerspectiveCamera(30, window.innerWidth/window.innerHeight, 10, 1000);
+	var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR =1000, FAR = 500;
+	camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 10, 600);
 	scene.add(camera);
-	camera.position.set(0,0,0);
+	camera.position.set(0,5,250);
     camera.rotation.set(0,0,0);
-	//camera.lookAt(scene.position);	
+	camera.lookAt(scene.position);	
 	// RENDERER
 	if ( Detector.webgl )
 		renderer = new THREE.WebGLRenderer( {antialias:true} );
@@ -80,7 +85,7 @@ function init()
 	// FLOOR
 	
 	// SKYBOX/FOG
-	//var skyBoxGeometry = new THREE.CubeGeometry( 10000, 10000, 10000 );
+	//var skyBoxGeometry = new THREE.CubeGeometry( 1400, 1400, 1400 );
 	//var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x9999ff, side: THREE.BackSide } );
 	//var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
 	// scene.add(skyBox);
@@ -89,55 +94,179 @@ function init()
 	////////////
 	// CUSTOM //
 	////////////
-	
+
+    var grassTexture = new THREE.ImageUtils.loadTexture( 'grass.png' );
+    grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping;
+    grassTexture.repeat.set( 20,20 );
+   var grassMaterial = new THREE.MeshBasicMaterial ( {map: grassTexture, side: THREE.DoubleSide } );
+
+    
+    
+    var grassGeometry = new THREE.PlaneGeometry(1000,1000,20,20);
+    var grass = new THREE.Mesh(grassGeometry, grassMaterial);
+    grass.position.set(0,-36,0);
+    grass.rotation.x=degToRadians(90);
+    scene.add(grass);
+    
+    
+    
+    
 	// MESHES WITH ANIMATED TEXTURES!
 	 var lakeTexture = new THREE.ImageUtils.loadTexture( 'spriteSheets/lake.png' );
-	annie4 = new TextureAnimator( lakeTexture, 1, 8, 8, 100 ); // texture, #horiz, #vert, #total, duration.
+	annie4 = new TextureAnimator( lakeTexture, 1, 8, 8, 300 ); // texture, #horiz, #vert, #total, duration.
 	var lakeMaterial = new THREE.MeshBasicMaterial( { map: lakeTexture, side:THREE.DoubleSide, transparent: true, depthWrite: false, depthTest: false  } );
-	var lakeGeometry = new THREE.PlaneGeometry(1500, 1500, 1, 1);
+	var lakeGeometry = new THREE.PlaneGeometry(200, 200, 1, 1);
 	var lake = new THREE.Mesh(lakeGeometry, lakeMaterial);
 	
-    lake.position.y=-50;
+    lake.position.y=-35;
+    lake.position.z=-200;
+    lake.position.x=0;
     lake.rotation.x=degToRadians(90);
 	scene.add(lake);
     
     
-	var runnerTexture = new THREE.ImageUtils.loadTexture( 'spriteSheets/wierdTree.png' );
+    	var runnerTexture = new THREE.ImageUtils.loadTexture( 'spriteSheets/wierdTree.png' );
 	annie = new TextureAnimator( runnerTexture, 15, 1, 15, 200 ); // texture, #horiz, #vert, #total, duration.
 	var runnerMaterial = new THREE.MeshBasicMaterial( { map: runnerTexture, side:THREE.DoubleSide, transparent: true, wireFrame: true,  depthWrite: true, depthTest: false  } );
-	var runnerGeometry = new THREE.PlaneGeometry(40, 90, 1, 1);
+	
+        
+  
+    for (i=0;i<=5;i++) {
+         var pw=Math.random()*(60-40+1)+40;
+         var ph=pw*2.25;
+       	var runnerGeometry = new THREE.PlaneGeometry(pw, ph, 1, 1);
 	var runner = new THREE.Mesh(runnerGeometry, runnerMaterial);
-	runner.position.set(-100,0,0);
-	scene.add(runner);
+	runner.position.set(-100,0,-100*i+350);
+	scene.add(runner); 
+        
+        
+    }
+    
+     for (i=0;i<=5;i++) {
+    var pw=Math.random()*(60-40+1)+40;
+         var ph=pw*2.25;
+       	var runnerGeometry = new THREE.PlaneGeometry(pw, ph, 1, 1);
+	var runner = new THREE.Mesh(runnerGeometry, runnerMaterial);
+	runner.position.set(100,0,-100*i+350);
+	scene.add(runner); 
+        
+        
+    }
+ 
+   var planterTexture = new THREE.ImageUtils.loadTexture( 'spriteSheets/planter.png' );
+	planter = new TextureAnimator( planterTexture, 4, 2, 8, 300 ); // texture, #horiz, #vert, #total, duration.
+	var planterMaterial = new THREE.MeshBasicMaterial( { map: planterTexture, side:THREE.DoubleSide, transparent: true, wireFrame: true,  depthWrite: true, depthTest: false  } );
+    var planterGeometry = new THREE.PlaneGeometry(50,50,1,1);
+    var planterObj = new THREE.Mesh(planterGeometry, planterMaterial);
+    planterObj.position.z=-1200;
+    planterObj.position.y=-10;
+    scene.add(planterObj);
+    
+    for (i=0; i<=5; i++) {
+    var px=Math.random()*(500-150+1)+150;
+    var py=Math.random()*(400+1);
+    var pr=Math.random()*(360+1);
+    var ph=Math.random()*(300-50+1)+50;
+    
+    if (Math.random()<=.5) {
+         px=px*-1;
+     }
+    if (Math.random() <=.49) {
+        py=-1*(Math.random()*(500-300+1)+200);  
+    }
+        if (Math.random() <=.49) {
+        pr=pr*-1;   
+    }
+        console.log(px);
+        console.log(py);
+        var planterGeometry = new THREE.PlaneGeometry(ph,ph,1,1);
+    var planterObj = new THREE.Mesh(planterGeometry, planterMaterial);
+    planterObj.position.set(px,0,py);
+    planterObj.position.y=-10+((ph-50)/5);
+        planterObj.rotation.y=radiansToDegrees(pr);
+        if (planterObj.position.z<=-1000) {
+         planterObj.position.z=400;   
+        }
+    scene.add(planterObj);
+        }
     
     
-    var runnerTexture2 = new THREE.ImageUtils.loadTexture( 'spriteSheets/wierdTree.png' );
-	annie2 = new TextureAnimator( runnerTexture2, 15, 1, 15, 200 ); // texture, #horiz, #vert, #total, duration.
-	var runnerMaterial2 = new THREE.MeshBasicMaterial( { map: runnerTexture, side:THREE.DoubleSide, transparent: true, wireFrame: true, depthWrite: false, depthTest: false  } );
-	var runnerGeometry2 = new THREE.PlaneGeometry(40, 90, 1, 1);
-	var runner2 = new THREE.Mesh(runnerGeometry, runnerMaterial);
-	runner2.position.set(100,0,0);
-    runner2.rotation.y=.5;
-     runner.rotation.y=.5;
-	scene.add(runner2);
+    //hills
+  var grassTexture2 = new THREE.ImageUtils.loadTexture( 'grass.png' );
+   var grassMaterial2 = new THREE.MeshBasicMaterial ( {map: grassTexture2, side:THREE.DoubleSide, transparent: true, depthWrite: false, depthTest: false  } );
+ var geometry = new THREE.Geometry(200,200,200);
+    var v1 = new THREE.Vector3(500,0,0);   // Vector3 used to specify position
+    var v2 = new THREE.Vector3(0,0,0);
+    var v3 = new THREE.Vector3(250,60,0);   // 2d = all vertices in the same plane.. z = 0
+ geometry.faceVertexUvs[ 0 ].push( [
+        new THREE.UV( 0, 0 ),
+        new THREE.UV( 0, 1 ),
+        new THREE.UV( 1, 1 ),
+        new THREE.UV( 1, 0 )
+    ] );
+    // Push vertices represented by position vectors
+    geometry.vertices.push(v1);
+    geometry.vertices.push(v2);
+    geometry.vertices.push(v3);
 
-var runnerTexture3 = new THREE.ImageUtils.loadTexture( 'spriteSheets/wierdTree.png' );
-	annie3 = new TextureAnimator( runnerTexture3, 15, 1, 15, 200 ); // texture, #horiz, #vert, #total, duration.
-	var runnerMaterial3 = new THREE.MeshBasicMaterial( { map: runnerTexture, side:THREE.DoubleSide, transparent: true, wireFrame: true } );
-    
-	var runnerGeometry3 = new THREE.PlaneGeometry(40, 90, 1, 1);
-	runnerGeometry.opacity = 0.5;
-    var runner3 = new THREE.Mesh(runnerGeometry, runnerMaterial);
-	runner3.position.set(0,0,0);
-    runner3.rotation.y=.5;
-    
-	scene.add(runner3);
-    
-    
-   
-    
-    
+    // Push face, defined with vertices in counter clock-wise order
+    geometry.faces.push(new THREE.Face3(0, 2, 1));
 
+    // Create a material and combine with geometry to create our mesh
+    var triangle = new THREE.Mesh(geometry, grassMaterial2);
+    triangle.position.y=-50;
+    triangle.position.z=-500;
+    scene.add(triangle);
+    
+     var geometry = new THREE.Geometry(200,200,200);
+    var v1 = new THREE.Vector3(-500,0,0);   // Vector3 used to specify position
+    var v2 = new THREE.Vector3(0,0,0);
+    var v3 = new THREE.Vector3(-320,100,0);   // 2d = all vertices in the same plane.. z = 0
+ geometry.faceVertexUvs[ 0 ].push( [
+        new THREE.UV( 0, 0 ),
+        new THREE.UV( 0, 1 ),
+        new THREE.UV( 1, 1 ),
+        new THREE.UV( 1, 0 )
+    ] );
+    // Push vertices represented by position vectors
+    geometry.vertices.push(v1);
+    geometry.vertices.push(v2);
+    geometry.vertices.push(v3);
+
+    // Push face, defined with vertices in counter clock-wise order
+    geometry.faces.push(new THREE.Face3(0, 2, 1));
+
+    // Create a material and combine with geometry to create our mesh
+    var triangle = new THREE.Mesh(geometry, grassMaterial2);
+    triangle.position.y=-50;
+    triangle.position.z=-500;
+    scene.add(triangle);
+    
+      var geometry = new THREE.Geometry(200,200,200);
+    var v1 = new THREE.Vector3(-250,0,0);   // Vector3 used to specify position
+    var v2 = new THREE.Vector3(260,0,0);
+    var v3 = new THREE.Vector3(28,60,0);   // 2d = all vertices in the same plane.. z = 0
+ geometry.faceVertexUvs[ 0 ].push( [
+        new THREE.UV( 0, 0 ),
+        new THREE.UV( 0, 1 ),
+        new THREE.UV( 1, 1 ),
+        new THREE.UV( 1, 0 )
+    ] );
+    // Push vertices represented by position vectors
+    geometry.vertices.push(v1);
+    geometry.vertices.push(v2);
+    geometry.vertices.push(v3);
+
+    // Push face, defined with vertices in counter clock-wise order
+    geometry.faces.push(new THREE.Face3(0, 2, 1));
+
+    // Create a material and combine with geometry to create our mesh
+    var triangle = new THREE.Mesh(geometry, grassMaterial2);
+    triangle.position.y=-50;
+    triangle.position.z=-500;
+    scene.add(triangle);
+    
+    
 }
 
 function animate() 
@@ -175,6 +304,7 @@ function update()
 
 	annie.update(1000 * delta);
     annie4.update(1000 * delta);
+    planter.update(1000*delta);
     
     //boomer.update(1000 * delta);
 	
@@ -254,8 +384,6 @@ switch(keycode){
 case 37 : //left arrow 向左箭头
 var xAdd = Math.sin(cameraRotY)*delta;
 var zAdd = Math.cos(cameraRotY)*delta;
-    console.log(zAdd);
-        console.log(xAdd);
 camera.position.z = camera.position.z+xAdd;
 camera.position.x = camera.position.x-zAdd;      
 

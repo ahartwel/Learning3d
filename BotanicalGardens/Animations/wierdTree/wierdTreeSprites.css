@@ -1,0 +1,29 @@
+/* ----------------------------------------------------
+   created with http://www.codeandweb.com/texturepacker 
+   ----------------------------------------------------
+   $TexturePacker:SmartUpdate:d8fa096485fa3d46254a3a0463dd608f:f35430c37f20d087300fbe3768bb799e:42585ad7317538b2694c7a45a9395165$
+   ----------------------------------------------------
+
+   usage: <span class="{-spritename-} sprite"></span>
+
+   replace {-spritename-} with the sprite you like to use
+
+*/
+
+.sprite {display:inline-block; overflow:hidden; background-repeat: no-repeat;background-image:url(wierdTreeSprites.png);}
+
+.Comp-1_00000 {width:456px; height:900px; background-position: -0px -12600px}
+.Comp-1_00001 {width:456px; height:900px; background-position: -0px -11700px}
+.Comp-1_00002 {width:456px; height:900px; background-position: -0px -10800px}
+.Comp-1_00003 {width:456px; height:900px; background-position: -0px -9900px}
+.Comp-1_00004 {width:456px; height:900px; background-position: -0px -9000px}
+.Comp-1_00005 {width:456px; height:900px; background-position: -0px -8100px}
+.Comp-1_00006 {width:456px; height:900px; background-position: -0px -7200px}
+.Comp-1_00007 {width:456px; height:900px; background-position: -0px -6300px}
+.Comp-1_00008 {width:456px; height:900px; background-position: -0px -5400px}
+.Comp-1_00009 {width:456px; height:900px; background-position: -0px -4500px}
+.Comp-1_00010 {width:456px; height:900px; background-position: -0px -3600px}
+.Comp-1_00011 {width:456px; height:900px; background-position: -0px -2700px}
+.Comp-1_00012 {width:456px; height:900px; background-position: -0px -1800px}
+.Comp-1_00013 {width:456px; height:900px; background-position: -0px -900px}
+.Comp-1_00014 {width:456px; height:900px; background-position: -0px -0px}
