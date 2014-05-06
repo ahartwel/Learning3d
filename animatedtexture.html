@@ -54,7 +54,7 @@ function init()
 	// CAMERA
 	var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
 	var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR =1000, FAR = 500;
-	camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 10, 600);
+	camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 10, 1000);
 	scene.add(camera);
 	camera.position.set(0,5,250);
     camera.rotation.set(0,0,0);
@@ -118,7 +118,7 @@ function init()
 	var lakeGeometry = new THREE.PlaneGeometry(200, 200, 1, 1);
 	var lake = new THREE.Mesh(lakeGeometry, lakeMaterial);
 	
-    lake.position.y=-35;
+    lake.position.y=-55;
     lake.position.z=-200;
     lake.position.x=0;
     lake.rotation.x=degToRadians(90);
@@ -162,7 +162,7 @@ function init()
     planterObj.position.y=-10;
     scene.add(planterObj);
     
-    for (i=0; i<=5; i++) {
+    for (i=0; i<=15; i++) {
     var px=Math.random()*(500-150+1)+150;
     var py=Math.random()*(400+1);
     var pr=Math.random()*(360+1);
@@ -264,6 +264,83 @@ function init()
     var triangle = new THREE.Mesh(geometry, grassMaterial2);
     triangle.position.y=-50;
     triangle.position.z=-500;
+    scene.add(triangle);
+    
+    
+    //hills 2
+    
+    var grassTexture2 = new THREE.ImageUtils.loadTexture( 'grass.png' );
+   var grassMaterial2 = new THREE.MeshBasicMaterial ( {map: grassTexture2, side:THREE.DoubleSide, transparent: true, depthWrite: false, depthTest: false  } );
+ var geometry = new THREE.Geometry(200,200,200);
+    var v1 = new THREE.Vector3(500,0,0);   // Vector3 used to specify position
+    var v2 = new THREE.Vector3(0,0,0);
+    var v3 = new THREE.Vector3(250,60,0);   // 2d = all vertices in the same plane.. z = 0
+ geometry.faceVertexUvs[ 0 ].push( [
+        new THREE.UV( 0, 0 ),
+        new THREE.UV( 0, 1 ),
+        new THREE.UV( 1, 1 ),
+        new THREE.UV( 1, 0 )
+    ] );
+    // Push vertices represented by position vectors
+    geometry.vertices.push(v1);
+    geometry.vertices.push(v2);
+    geometry.vertices.push(v3);
+
+    // Push face, defined with vertices in counter clock-wise order
+    geometry.faces.push(new THREE.Face3(0, 2, 1));
+
+    // Create a material and combine with geometry to create our mesh
+    var triangle = new THREE.Mesh(geometry, grassMaterial2);
+    triangle.position.y=-50;
+    triangle.position.z=500;
+    scene.add(triangle);
+    
+     var geometry = new THREE.Geometry(200,200,200);
+    var v1 = new THREE.Vector3(-500,0,0);   // Vector3 used to specify position
+    var v2 = new THREE.Vector3(0,0,0);
+    var v3 = new THREE.Vector3(-320,100,0);   // 2d = all vertices in the same plane.. z = 0
+ geometry.faceVertexUvs[ 0 ].push( [
+        new THREE.UV( 0, 0 ),
+        new THREE.UV( 0, 1 ),
+        new THREE.UV( 1, 1 ),
+        new THREE.UV( 1, 0 )
+    ] );
+    // Push vertices represented by position vectors
+    geometry.vertices.push(v1);
+    geometry.vertices.push(v2);
+    geometry.vertices.push(v3);
+
+    // Push face, defined with vertices in counter clock-wise order
+    geometry.faces.push(new THREE.Face3(0, 2, 1));
+
+    // Create a material and combine with geometry to create our mesh
+    var triangle = new THREE.Mesh(geometry, grassMaterial2);
+    triangle.position.y=-50;
+    triangle.position.z=500;
+    scene.add(triangle);
+    
+      var geometry = new THREE.Geometry(200,200,200);
+    var v1 = new THREE.Vector3(-250,0,0);   // Vector3 used to specify position
+    var v2 = new THREE.Vector3(260,0,0);
+    var v3 = new THREE.Vector3(28,60,0);   // 2d = all vertices in the same plane.. z = 0
+ geometry.faceVertexUvs[ 0 ].push( [
+        new THREE.UV( 0, 0 ),
+        new THREE.UV( 0, 1 ),
+        new THREE.UV( 1, 1 ),
+        new THREE.UV( 1, 0 )
+    ] );
+    // Push vertices represented by position vectors
+    geometry.vertices.push(v1);
+    geometry.vertices.push(v2);
+    geometry.vertices.push(v3);
+
+    // Push face, defined with vertices in counter clock-wise order
+    geometry.faces.push(new THREE.Face3(0, 2, 1));
+
+    // Create a material and combine with geometry to create our mesh
+    var triangle = new THREE.Mesh(geometry, grassMaterial2);
+    triangle.position.y=-50;
+    triangle.position.z=500;
     scene.add(triangle);
     
     
